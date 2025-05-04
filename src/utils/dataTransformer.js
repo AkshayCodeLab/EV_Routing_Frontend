@@ -22,3 +22,11 @@ export const transformGraphData = (graphicalData) => {
 
   return newData;
 };
+
+export const parseFraction = (input) => {
+  if (input.includes("/")) {
+    const [num, denom] = input.split("/").map(Number);
+    return denom ? num / denom : NaN;
+  }
+  return parseFloat(input);
+};

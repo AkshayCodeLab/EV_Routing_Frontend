@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import useFetchGraph from "./hooks/useFetchGraph";
-import { transformGraphData } from "./utils/dataTransformer";
+import { parseFraction, transformGraphData } from "./utils/dataTransformer";
 import { apiService } from "./services/apiService";
 import { Graph, PathForm, CalibrationForm } from "./components";
-import { INITIAL_GRAPH_DATA } from "./constants";
+import { INITIAL_GRAPH_DATA, INITIAL_PAIR_WISE_MATRIX } from "./constants";
 
 function App() {
   const [error, setError] = useState("");
@@ -18,7 +18,7 @@ function App() {
     to: "",
     from: "",
     fuel: "",
-    matrix: Array.from({ length: 4 }, () => Array(4).fill(0)),
+    matrix: INITIAL_PAIR_WISE_MATRIX.map((row) => [...row]),
   });
 
   const handleInputChange = (e) => {
@@ -30,7 +30,7 @@ function App() {
     if (matrixMatch) {
       const row = parseInt(matrixMatch[1], 10);
       const col = parseInt(matrixMatch[2], 10);
-      formRef.current.matrix[row][col] = parseFloat(value) || 0;
+      formRef.current.matrix[row][col] = parseFraction(value) || 0;
     } else {
       formRef.current[name] = value;
     }
@@ -100,6 +100,7 @@ function App() {
       <PathForm
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
+        formRef={formRef}
       />
     </div>
   );

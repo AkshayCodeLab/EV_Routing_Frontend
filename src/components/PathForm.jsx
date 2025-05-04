@@ -1,6 +1,6 @@
 import React from "react";
 
-const PathForm = ({ handleInputChange, handleSubmit }) => {
+const PathForm = ({ handleInputChange, handleSubmit, formRef }) => {
   return (
     <form
       onSubmit={(e) => {
@@ -67,6 +67,7 @@ const PathForm = ({ handleInputChange, handleSubmit }) => {
               <input
                 key={`${row}-${col}`}
                 name={`matrix[${row}][${col}]`}
+                defaultValue={formRef.current.matrix[row][col]}
                 onChange={handleInputChange}
                 className="w-12 text-center border border-gray-300 rounded-sm text-sm py-1"
               />

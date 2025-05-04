@@ -47,3 +47,11 @@ export const VEHICLE_OPTIONS = [
   { value: "Tesla Model Y", label: "Tesla Model Y" },
   { value: "Hyundai Kona Electric", label: "Hyundai Kona Electric" },
 ];
+
+export const INITIAL_PAIR_WISE_MATRIX = [
+  // Energy, Detour, Recharge, Threshold
+  [1, 3, 5, 5], // Energy is moderately more important than Detour, strongly more than others
+  [1 / 3.0, 1, 3, 3], // Detour is moderately more important than Recharge and Threshold
+  [1 / 5.0, 1 / 3.0, 1, 1], // Recharge and Threshold are equally important
+  [1 / 5.0, 1 / 3.0, 1, 1],
+];
