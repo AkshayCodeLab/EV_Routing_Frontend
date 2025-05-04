@@ -18,19 +18,37 @@ function App() {
     to: "",
     from: "",
     fuel: "",
+    matrix: Array.from({ length: 4 }, () => Array(4).fill(0)),
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    formRef.current[name] = value;
+
+    // Check if it's a matrix field
+    const matrixMatch = name.match(/^matrix\[(\d+)\]\[(\d+)\]$/);
+
+    if (matrixMatch) {
+      const row = parseInt(matrixMatch[1], 10);
+      const col = parseInt(matrixMatch[2], 10);
+      formRef.current.matrix[row][col] = parseFloat(value) || 0;
+    } else {
+      formRef.current[name] = value;
+    }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { to, from, fuel } = formRef.current;
+    const { to, from, fuel, matrix } = formRef.current;
 
+    console.log(to, from, fuel, matrix);
+
+    console.log("Logging here");
     try {
-      const response = await apiService.findShortestPath({ to, from, fuel });
+      const response = await apiService.findShortestPath({
+        to,
+        from,
+        fuel,
+        matrix,
+      });
 
       if (response?.second.length === 0) {
         setError("Insufficient fuel to traverse path!");
@@ -44,9 +62,7 @@ function App() {
     }
   };
 
-  const handleCaliberation = async (e) => {
-    e.preventDefault();
-
+  const handleCaliberation = async () => {
     setPath([]);
     if (!vehicleModel) {
       setSimulData(transformGraphData(INITIAL_GRAPH_DATA));
