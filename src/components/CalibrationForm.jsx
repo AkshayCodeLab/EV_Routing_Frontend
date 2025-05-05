@@ -10,6 +10,11 @@ const CalibrationForm = ({
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        window.scrollTo({
+          top: 50,
+          behavior: "smooth",
+        });
+
         handleCaliberation();
       }}
       className="max-w-sm w-full mx-auto p-4 border border-gray-300 rounded-md bg-white"
