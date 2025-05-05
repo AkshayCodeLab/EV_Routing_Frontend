@@ -2,7 +2,7 @@ export const transformGraphData = (graphicalData) => {
   const newData = {
     nodes: [],
     links: [],
-    unit: " KWH",
+    unit: " Km",
   };
 
   graphicalData.edges.forEach((edge) => {
