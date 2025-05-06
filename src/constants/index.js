@@ -1,3 +1,4 @@
+// from = 1, to = 10, fuel = 6,7
 export const INITIAL_GRAPH_DATA = {
   vertices: 11,
   edges: [
@@ -22,6 +23,26 @@ export const INITIAL_GRAPH_DATA = {
   // spread your charging stations at low-, mid-, and high-index nodes:
   chargingStations: [4, 6, 9],
 };
+// export const INITIAL_GRAPH_DATA = {
+//   vertices: 7,
+//   edges: [
+//     // → Direct path: LOW kWh, but NO chargers
+//     [1, 2, 5], // ceil( 5  / 7.34) = 1 kWh
+//     [2, 3, 5], // 1 kWh
+//     [3, 6, 5], // 1 kWh
+//     // total = 3 kWh
+
+//     // → Charging path: HIGHER kWh, but visits 4 & 5
+//     [1, 4, 20], // ceil(20 / 7.34) = 3 kWh
+//     [4, 5, 20], // 3 kWh
+//     [5, 6, 20], // 3 kWh
+//     // total = 9 kWh
+
+//     // Optional cross-link (mid-choice)
+//     [2, 5, 30], // 5 kWh
+//   ],
+//   chargingStations: [4, 5],
+// };
 
 // export const INITIAL_GRAPH_DATA = {
 //   vertices: 8,
@@ -48,10 +69,21 @@ export const VEHICLE_OPTIONS = [
   { value: "Hyundai Kona Electric", label: "Hyundai Kona Electric" },
 ];
 
+// export const INITIAL_PAIR_WISE_MATRIX =
+//   // even stronger threshold preference
+//   [
+//     /*E*/ [1, 1 / 3, 1 / 5, 1 / 11],
+//     /*D*/ [3, 1, 1 / 3, 1 / 9],
+//     /*R*/ [5, 3, 1, 1 / 7],
+//     /*T*/ [11, 9, 7, 1],
+//   ];
+
+// Prioritise Energy
+// to = 6, from = 1, fuel = 4
 export const INITIAL_PAIR_WISE_MATRIX = [
-  // Energy, Detour, Recharge, Threshold
-  [1, 3, 5, 5], // Energy is moderately more important than Detour, strongly more than others
-  [1 / 3.0, 1, 3, 3], // Detour is moderately more important than Recharge and Threshold
-  [1 / 5.0, 1 / 3.0, 1, 1], // Recharge and Threshold are equally important
-  [1 / 5.0, 1 / 3.0, 1, 1],
+  /*           Energy  Detour  Recharge  Threshold */
+  /* Energy */ [1, 5, 7, 9],
+  /* Detour */ [1 / 5, 1, 3, 5],
+  /* Recharge */ [1 / 7, 1 / 3, 1, 3],
+  /* Threshold*/ [1 / 9, 1 / 5, 1 / 3, 1],
 ];
