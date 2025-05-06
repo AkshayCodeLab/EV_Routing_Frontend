@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 
-const ForceDirectedGraph = ({ data, pathNodes }) => {
+const ForceDirectedGraph = ({ data, pathNodes, chargingStations }) => {
   const svgRef = useRef(null);
   const width = 1600; // Increased width
   const height = 1200; // Increased height
@@ -97,6 +97,16 @@ const ForceDirectedGraph = ({ data, pathNodes }) => {
       .join("text")
       .text((d) => d.value + (data?.unit ? data?.unit : " KM"));
 
+    const chargingRing = svg
+      .append("g")
+      .selectAll("circle")
+      .data(nodes.filter((d) => chargingStations.includes(d.id)))
+      .join("circle")
+      .attr("r", 14)
+      .attr("stroke", "blue")
+      .attr("stroke-width", 2)
+      .attr("fill", "none");
+
     // Update positions on each tick
     simulation.on("tick", () => {
       // Constrain nodes to stay within the viewport
@@ -119,6 +129,8 @@ const ForceDirectedGraph = ({ data, pathNodes }) => {
       node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
 
       nodeLabel.attr("x", (d) => d.x).attr("y", (d) => d.y - 15);
+
+      chargingRing.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
 
       edgeWeight
         .attr("x", (d) => (d.source.x + d.target.x) / 2 + 10)

@@ -20,7 +20,7 @@ export const INITIAL_GRAPH_DATA = {
     [3, 5, 28], // ceil(28  / 7.33859) = 4 kWh
   ],
   // spread your charging stations at low-, mid-, and high-index nodes:
-  chargingStations: [1, 4, 6, 9],
+  chargingStations: [4, 6, 9],
 };
 
 // export const INITIAL_GRAPH_DATA = {

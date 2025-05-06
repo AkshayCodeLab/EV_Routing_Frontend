@@ -2,8 +2,9 @@ import { useRef, useState } from "react";
 import useFetchGraph from "./hooks/useFetchGraph";
 import { parseFraction, transformGraphData } from "./utils/dataTransformer";
 import { apiService } from "./services/apiService";
-import { Graph, PathForm, CalibrationForm } from "./components";
+import { PathForm, CalibrationForm } from "./components";
 import { INITIAL_GRAPH_DATA, INITIAL_PAIR_WISE_MATRIX } from "./constants";
+import ForceDirectedGraph from "./components/ForceDirectedGraph";
 
 function App() {
   const [error, setError] = useState("");
@@ -86,22 +87,56 @@ function App() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="App">
-      <Graph simulData={simulData} path={path} />
+    <div className="App min-h-screen bg-gray-50 px-6 py-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Force Directed Graph Section */}
+        <div className="bg-white rounded-xl shadow-md p-4">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">
+            Graph Visualization
+          </h2>
+          <ForceDirectedGraph
+            data={simulData}
+            pathNodes={path}
+            chargingStations={graph.chargingStations ?? []}
+          />
+        </div>
 
-      {error && <div className="error">{error}</div>}
+        {/* Error Alert */}
+        {error && (
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
 
-      <CalibrationForm
-        vehicleModel={vehicleModel}
-        setVehicleModel={setVehicleModel}
-        handleCaliberation={handleCaliberation}
-      />
+        {/* Calibration and Path Forms */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <h2 className="text-lg font-semibold mb-4 text-gray-700">
+              Calibration
+            </h2>
+            <CalibrationForm
+              vehicleModel={vehicleModel}
+              setVehicleModel={setVehicleModel}
+              handleCaliberation={handleCaliberation}
+            />
+          </div>
 
-      <PathForm
-        handleInputChange={handleInputChange}
-        handleSubmit={handleSubmit}
-        formRef={formRef}
-      />
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <h2 className="text-lg font-semibold mb-4 text-gray-700">
+              Path Finder
+            </h2>
+            <PathForm
+              handleInputChange={handleInputChange}
+              handleSubmit={handleSubmit}
+              formRef={formRef}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
