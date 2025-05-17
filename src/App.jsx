@@ -2,13 +2,14 @@ import { useRef, useState } from "react";
 import useFetchGraph from "./hooks/useFetchGraph";
 import { parseFraction, transformGraphData } from "./utils/dataTransformer";
 import { apiService } from "./services/apiService";
-import { PathForm, CalibrationForm } from "./components";
+import { PathForm, CalibrationForm, ChargingPlan } from "./components";
 import { INITIAL_GRAPH_DATA, INITIAL_PAIR_WISE_MATRIX } from "./constants";
 import ForceDirectedGraph from "./components/ForceDirectedGraph";
 
 function App() {
   const [error, setError] = useState("");
   const [path, setPath] = useState([]);
+  const [rechargeAmounts, setRechargeAmounts] = useState({});
   const [vehicleModel, setVehicleModel] = useState("");
   const [simulData, setSimulData] = useState(
     transformGraphData(INITIAL_GRAPH_DATA)
@@ -42,7 +43,6 @@ function App() {
 
     console.log(to, from, fuel, matrix);
 
-    console.log("Logging here");
     try {
       const response = await apiService.findShortestPath({
         to,
@@ -51,12 +51,19 @@ function App() {
         matrix,
       });
 
-      if (response?.second.length === 0) {
+      console.log(
+        "This is the shortest path response recieved: " +
+          JSON.stringify(response)
+      );
+
+      if (response?.path.length === 0) {
         setError("Insufficient fuel to traverse path!");
         setPath([]);
+        setRechargeAmounts({});
       } else {
         setError("");
-        setPath(response?.second);
+        setPath(response?.path);
+        setRechargeAmounts(response.rechargeAmount || {});
       }
     } catch (error) {
       setError("An error occurred while finding the path");
@@ -100,6 +107,8 @@ function App() {
             chargingStations={graph.chargingStations ?? []}
           />
         </div>
+
+        <ChargingPlan rechargeAmounts={rechargeAmounts} />
 
         {/* Error Alert */}
         {error && (
